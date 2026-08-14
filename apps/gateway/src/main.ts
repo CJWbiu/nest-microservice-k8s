@@ -27,10 +27,34 @@ async function bootstrap() {
       createProxyMiddleware({
         target: route.target,
         changeOrigin: true,
-        pathRewrite: undefined,
+        // Express strips the mount path (route.path) from req.url before the
+        // middleware runs, so forward req.originalUrl to keep the full prefix
+        // (i.e. stripPrefix: false, matching the original Zuul routes).
+        pathRewrite: (_path, req) => (req as any).originalUrl,
         on: {
-          error: (err, _req, res) => {
-            console.error(`Proxy error for ${route.path}:`, err.message);
+          proxyReq: (_proxyReq, req) => {
+            (req as any)._gatewayStart = Date.now();
+            const clientIp =
+              (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ||
+              req.socket.remoteAddress;
+            console.log(
+              `[Gateway] --> ${req.method} ${req.url} | route=${route.path} target=${route.target} ip=${clientIp}`,
+            );
+          },
+          proxyRes: (proxyRes, req) => {
+            const ms = Date.now() - ((req as any)._gatewayStart ?? Date.now());
+            console.log(
+              `[Gateway] <-- ${req.method} ${req.url} | status=${proxyRes.statusCode} ${ms}ms`,
+            );
+          },
+          error: (err, req, res) => {
+            const clientIp =
+              (req.headers?.['x-forwarded-for'] as string)?.split(',')[0]?.trim() ||
+              req.socket?.remoteAddress;
+            console.error(
+              `[Gateway] ERROR ${req.method} ${req.url} | route=${route.path} ip=${clientIp}:`,
+              err.message,
+            );
             if ('writeHead' in res) {
               (res as any).writeHead(502, { 'Content-Type': 'application/json' });
               (res as any).end(JSON.stringify({ message: 'Bad Gateway', error: err.message }));

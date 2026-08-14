@@ -12,6 +12,11 @@
     "dev:payment": "pnpm --filter @bookstore/payment start:dev",
     "dev:gateway": "pnpm --filter @bookstore/gateway start:dev",
     "dev:web": "pnpm --filter @bookstore/web dev",
+    "debug:account": "pnpm --filter @bookstore/account start:debug",
+    "debug:security": "pnpm --filter @bookstore/security start:debug",
+    "debug:warehouse": "pnpm --filter @bookstore/warehouse start:debug",
+    "debug:payment": "pnpm --filter @bookstore/payment start:debug",
+    "debug:gateway": "pnpm --filter @bookstore/gateway start:debug",
     "db:up": "docker compose up -d postgres",
     "db:down": "docker compose down",
     "lint": "pnpm -r lint"

@@ -1,0 +1,82 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "account (9229)",
+      "port": 9229,
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**"],
+      "outFiles": [
+        "${workspaceFolder}/apps/account/dist/**/*.js",
+        "${workspaceFolder}/packages/nest-common/dist/**/*.js",
+        "${workspaceFolder}/packages/shared/dist/**/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "security (9230)",
+      "port": 9230,
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**"],
+      "outFiles": [
+        "${workspaceFolder}/apps/security/dist/**/*.js",
+        "${workspaceFolder}/packages/nest-common/dist/**/*.js",
+        "${workspaceFolder}/packages/shared/dist/**/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "warehouse (9231)",
+      "port": 9231,
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**"],
+      "outFiles": [
+        "${workspaceFolder}/apps/warehouse/dist/**/*.js",
+        "${workspaceFolder}/packages/nest-common/dist/**/*.js",
+        "${workspaceFolder}/packages/shared/dist/**/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "payment (9232)",
+      "port": 9232,
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**"],
+      "outFiles": [
+        "${workspaceFolder}/apps/payment/dist/**/*.js",
+        "${workspaceFolder}/packages/nest-common/dist/**/*.js",
+        "${workspaceFolder}/packages/shared/dist/**/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "gateway (9233)",
+      "port": 9233,
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**"],
+      "outFiles": [
+        "${workspaceFolder}/apps/gateway/dist/**/*.js",
+        "${workspaceFolder}/packages/nest-common/dist/**/*.js",
+        "${workspaceFolder}/packages/shared/dist/**/*.js"
+      ]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "All backend services",
+      "configurations": [
+        "account (9229)",
+        "security (9230)",
+        "warehouse (9231)",
+        "payment (9232)",
+        "gateway (9233)"
+      ]
+    }
+  ]
+}
