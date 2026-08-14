@@ -1,5 +1,6 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, Link, useNavigate } from 'react-router-dom';
-import { Layout, Menu, Button, Space, Typography } from 'antd';
+import { Layout, Menu, Button, Space, Spin, Typography } from 'antd';
 import {
   BookOutlined,
   ShoppingCartOutlined,
@@ -8,14 +9,15 @@ import {
   LoginOutlined,
 } from '@ant-design/icons';
 import { useAuth } from './auth';
-import HomePage from './pages/HomePage';
-import ProductPage from './pages/ProductPage';
-import CartPage from './pages/CartPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import AccountPage from './pages/AccountPage';
-import PaymentPage from './pages/PaymentPage';
 import { CartProvider, useCart } from './cart';
+
+const HomePage = lazy(() => import('./pages/HomePage'));
+const ProductPage = lazy(() => import('./pages/ProductPage'));
+const CartPage = lazy(() => import('./pages/CartPage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const AccountPage = lazy(() => import('./pages/AccountPage'));
+const PaymentPage = lazy(() => import('./pages/PaymentPage'));
 
 const { Header, Content, Footer } = Layout;
 
@@ -85,15 +87,30 @@ function Shell() {
         </Space>
       </Header>
       <Content style={{ padding: '28px 32px', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/products/:id" element={<ProductPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/account" element={token ? <AccountPage /> : <Navigate to="/login" />} />
-          <Route path="/payment/:payId" element={<PaymentPage />} />
-        </Routes>
+        <Suspense
+          fallback={
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '64px 0',
+              }}
+            >
+              <Spin size="large" />
+            </div>
+          }
+        >
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/products/:id" element={<ProductPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/account" element={token ? <AccountPage /> : <Navigate to="/login" />} />
+            <Route path="/payment/:payId" element={<PaymentPage />} />
+          </Routes>
+        </Suspense>
       </Content>
       <Footer style={{ textAlign: 'center', background: 'transparent', color: '#5a6b62' }}>
         NestJS 复刻 · Fenix Bookstore · Kubernetes Microservices
