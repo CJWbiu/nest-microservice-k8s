@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: warehouse-config
+  namespace: bookstore-microservices
+data:
+  PORT: "80"
+  DB_HOST: postgres
+  DB_PORT: "5432"
+  DB_USER: bookstore
+  DB_PASSWORD: bookstore
+  DB_NAME: warehouse
+  JWT_SIGNING_KEY: 601304E0-8AD4-40B0-BD51-0B432DC47461
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: warehouse
+  namespace: bookstore-microservices
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: warehouse
+  template:
+    metadata:
+      labels:
+        app: warehouse
+    spec:
+      serviceAccountName: book-admin
+      containers:
+        - name: warehouse
+          image: bookstore/warehouse:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: warehouse-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: warehouse
+  namespace: bookstore-microservices
+spec:
+  selector:
+    app: warehouse
+  ports:
+    - port: 80
+      targetPort: 80

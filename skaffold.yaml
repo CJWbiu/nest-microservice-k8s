@@ -1,0 +1,44 @@
+apiVersion: skaffold/v4beta11
+kind: Config
+metadata:
+  name: nest-bookstore
+build:
+  artifacts:
+    - image: bookstore/account
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          SERVICE: account
+    - image: bookstore/security
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          SERVICE: security
+    - image: bookstore/warehouse
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          SERVICE: warehouse
+    - image: bookstore/payment
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          SERVICE: payment
+    - image: bookstore/gateway
+      context: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          SERVICE: gateway
+    - image: bookstore/web
+      context: .
+      docker:
+        dockerfile: apps/web/Dockerfile
+manifests:
+  kustomize:
+    paths:
+      - deploy

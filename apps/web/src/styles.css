@@ -1,0 +1,25 @@
+:root {
+  --bg: #f3efe6;
+  --ink: #1c2b24;
+  --accent: #1a5f4a;
+  --panel: #fffdf8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 10% 10%, rgba(26, 95, 74, 0.12), transparent 40%),
+    radial-gradient(circle at 90% 0%, rgba(180, 120, 60, 0.1), transparent 35%),
+    linear-gradient(180deg, #f7f2e8 0%, #ebe4d6 100%);
+  font-family: "Source Han Sans SC", "Noto Sans SC", "PingFang SC", sans-serif;
+}
+
+a {
+  color: inherit;
+}

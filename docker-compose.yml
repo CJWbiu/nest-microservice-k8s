@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: bookstore-postgres
+    environment:
+      POSTGRES_USER: bookstore
+      POSTGRES_PASSWORD: bookstore
+      POSTGRES_DB: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./deploy/k8s/postgres-init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - bookstore-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U bookstore']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  bookstore-pgdata:

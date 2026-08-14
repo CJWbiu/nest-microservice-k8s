@@ -1,0 +1,3 @@
+CREATE DATABASE account;
+CREATE DATABASE warehouse;
+CREATE DATABASE payment;

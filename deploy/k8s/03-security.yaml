@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: security-config
+  namespace: bookstore-microservices
+data:
+  PORT: "80"
+  ACCOUNT_URL: http://account
+  JWT_SIGNING_KEY: 601304E0-8AD4-40B0-BD51-0B432DC47461
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: security
+  namespace: bookstore-microservices
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: security
+  template:
+    metadata:
+      labels:
+        app: security
+    spec:
+      serviceAccountName: book-admin
+      containers:
+        - name: security
+          image: bookstore/security:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: security-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: security
+  namespace: bookstore-microservices
+spec:
+  selector:
+    app: security
+  ports:
+    - port: 80
+      targetPort: 80
