@@ -22,7 +22,8 @@ export class AccountModule implements OnModuleInit {
     const count = await this.repo.count();
     if (count > 0) return;
 
-    // bcrypt hash for password "123456" (same as Java demo)
+    // 服务端保存的是「客户端已编码的密码」再 BCrypt 一次的结果（与原版种子一致）。
+    // 客户端编码：bcrypt(md5("123456"), CLIENT_SALT) 后去掉盐前缀。
     const password =
       '$2a$10$iIim4LtpT2yjxU2YVNDuO.yb1Z2lq86vYBZleAeuIh2aFXjyoMCM.';
     await this.repo.save(

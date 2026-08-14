@@ -49,6 +49,9 @@ lerna-debug.log*
 .temp
 .tmp
 
+# pnpm local content-addressable store (created when global store is unavailable)
+.pnpm-store/
+
 # Runtime data
 pids
 *.pid

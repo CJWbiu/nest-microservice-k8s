@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { encodePassword } from './encrypt';
 import {
   OAuthClients,
   OAuthTokenResponse,
@@ -24,7 +25,7 @@ export async function login(username: string, password: string) {
   const body = new URLSearchParams({
     grant_type: 'password',
     username,
-    password,
+    password: encodePassword(password),
     client_id: OAuthClients.frontend.clientId,
     client_secret: OAuthClients.frontend.clientSecret,
   });
@@ -46,7 +47,10 @@ export function logout() {
 }
 
 export async function register(account: AccountDto) {
-  const { data } = await api.post('/restful/accounts', account);
+  const { data } = await api.post('/restful/accounts', {
+    ...account,
+    password: account.password ? encodePassword(account.password) : undefined,
+  });
   return data;
 }
 
